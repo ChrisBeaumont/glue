@@ -120,6 +120,12 @@ class ComponentID(object):
     def __rdiv__(self, other):
         return BinaryComponentLink(other, self, operator.div)
 
+    def __truediv__(self, other):
+        return BinaryComponentLink(self, other, operator.truediv)
+
+    def __rtruediv__(self, other):
+        return BinaryComponentLink(other, self, operator.truediv)
+
     def __pow__(self, other):
         return BinaryComponentLink(self, other, operator.pow)
 

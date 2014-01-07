@@ -176,7 +176,7 @@ def test_arithmetic_id_link():
     np.testing.assert_array_equal(d[y10 + d.id['x']], [2, 4, 4, 6])
     np.testing.assert_array_equal(d[y10 - d.id['x']], [0, 0, -2, -2])
     np.testing.assert_array_equal(d[y10 * d.id['x']], [1, 4, 3, 8])
-    np.testing.assert_array_equal(d[y10 / d.id['x']], [1, 1, 0, 0])
+    np.testing.assert_array_equal(d[y10 / d.id['x']], [1, 1, 1/3., 1/2.])
     np.testing.assert_array_equal(d[y10 ** d.id['x']], [1, 4, 1, 16])
 
 

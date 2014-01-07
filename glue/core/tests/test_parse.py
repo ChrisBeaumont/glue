@@ -57,7 +57,7 @@ class TestParse(object):
         assert expected == result
 
     def test_validate(self):
-        ref = {'a': 1, 'b': 2}
+        ref = {b'a': 1, b'b': 2}
         parse._validate('{a} + {b}', ref)
         parse._validate('{a}', ref)
         parse._validate('3 + 4', ref)

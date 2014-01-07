@@ -91,8 +91,8 @@ def has_extension(exts):
 
 def is_hdf5(filename):
     # All hdf5 files begin with the same sequence
-    with open(filename) as infile:
-        return infile.read(8) == '\x89HDF\r\n\x1a\n'
+    with open(filename, 'rb') as infile:
+        return infile.read(8) == b'\x89HDF\r\n\x1a\n'
 
 
 def is_fits(filename):
