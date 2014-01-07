@@ -41,7 +41,7 @@ from .io import extract_data_fits, extract_data_hdf5
 from .util import file_format
 from .coordinates import coordinates_from_header, coordinates_from_wcs
 from ..external.astro import fits
-
+from ..external import six
 
 __all__ = ['load_data', 'gridded_data', 'casalike_cube',
            'tabular_data', 'img_data']
@@ -334,7 +334,7 @@ casalike_cube.identifier = is_casalike
 
 def _ascii_identifier_v02(origin, args, kwargs):
     # this works for astropy v0.2
-    if isinstance(args[0], basestring):
+    if isinstance(args[0], six.string_types):
         return args[0].endswith(('csv', 'tsv', 'txt', 'tbl', 'dat',
                                  'csv.gz', 'tsv.gz', 'txt.gz', 'tbl.gz',
                                  'dat.gz'))

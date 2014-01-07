@@ -38,7 +38,7 @@ def simple_catalog():
 
     :param suffix: File suffix. string
     """
-    with make_file('#a, b\n1, 2\n3, 4', '.csv') as result:
+    with make_file(b'#a, b\n1, 2\n3, 4', '.csv') as result:
         yield result
 
 

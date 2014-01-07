@@ -696,7 +696,7 @@ class Data(object):
         return self._world_component_ids[axis]
 
     def component_ids(self):
-        return self._components.keys()
+        return list(self._components.keys())
 
     def new_subset(self, subset=None, color=None, label=None, **kwargs):
         """ Create a new subset, and attach to self.

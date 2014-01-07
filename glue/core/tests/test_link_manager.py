@@ -57,7 +57,7 @@ def example_components(self, add_derived=True):
 class TestAccessibleLinks(object):
 
     def setup_method(self, method):
-        self.cs = [ComponentID("%i" % i) for i in xrange(10)]
+        self.cs = [ComponentID("%i" % i) for i in range(10)]
 
     def test_returned_if_available(self):
         cids = self.cs[0:5]
