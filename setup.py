@@ -2,11 +2,6 @@
 from __future__ import print_function
 from setuptools import setup, Command, find_packages
 
-try:  # Python 3.x
-    from setuptools.command.build_py import build_py_2to3 as build_py
-except ImportError:  # Python 2.x
-    from setuptools.command.build_py import build_py
-
 import sys
 import subprocess
 
@@ -50,5 +45,6 @@ setup(name='Glue',
       packages = find_packages(),
       entry_points={'console_scripts' : console_scripts},
       cmdclass=cmdclass,
-      package_data={'': ['*.png', '*.ui']}
+      package_data={'': ['*.png', '*.ui']},
+      use_2to3=True
     )

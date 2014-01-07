@@ -13,7 +13,7 @@ def identity(x):
     return x
 
 OPSYM = {operator.add: '+', operator.sub: '-',
-         operator.div: '/', operator.mul: '*',
+         operator.truediv: '/', operator.mul: '*',
          operator.pow: '**'}
 
 
