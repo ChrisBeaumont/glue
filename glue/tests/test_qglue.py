@@ -34,7 +34,7 @@ class TestQGlue(object):
         self.xy = {'x': x, 'y': y}
         self.dict_data = {'u': u, 'v': v}
         self.recarray_data = np.rec.array([(0, 1), (2, 3)],
-                                          dtype=[('a', 'i'), ('b', 'i')])
+                                          dtype=[(b'a', int), (b'b', int)])
         self.astropy_table = Table({'x': x, 'y': y})
         self.bad_data = {'x': x, 'u': u}
 
