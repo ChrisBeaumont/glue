@@ -1,4 +1,8 @@
 #pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103,W0612
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import pytest
 
 import numpy as np

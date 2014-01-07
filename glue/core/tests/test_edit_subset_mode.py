@@ -1,4 +1,8 @@
 #pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import itertools
 
 import numpy as np
@@ -169,7 +173,7 @@ def apply(dc, state, focus=False):
     mode.mode = ReplaceMode
     mode.update(dc, state, dc[0] if focus else None)
 
-    print len(dc[0].subsets)
+    print(len(dc[0].subsets))
     did_add = len(dc[0].subsets) > ct
     did_apply = sub is not None and sub.subset_state is not old_state
     return did_add, did_apply

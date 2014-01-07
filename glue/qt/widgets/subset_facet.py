@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from ...external.qt.QtGui import (QDialog, QDoubleValidator, QIcon)
 import numpy as np
 from matplotlib import cm
@@ -91,13 +94,13 @@ def main():
     dc = DataCollection([d, d2])
     SubsetFacet.facet(dc)
 
-    print 'd1 subsets'
+    print('d1 subsets')
     for s in d.subsets:
-        print s.label, s.subset_state, s.style.color
+        print(s.label, s.subset_state, s.style.color)
 
-    print 'd2 subsets'
+    print('d2 subsets')
     for s in d2.subsets:
-        print s.label, s.subset_state, s.style.color
+        print(s.label, s.subset_state, s.style.color)
 
     del app
 

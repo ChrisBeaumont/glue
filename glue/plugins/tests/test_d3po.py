@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from tempfile import mkdtemp
 import os
 from shutil import rmtree

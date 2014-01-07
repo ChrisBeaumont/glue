@@ -2,6 +2,10 @@
 .. module::glue.message
 
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 __all__ = ['Message', 'ErrorMessage', 'SubsetMessage', 'SubsetCreateMessage',
            'SubsetUpdateMessage', 'SubsetDeleteMessage', 'DataMessage',
            'DataAddComponentMessage', 'DataUpdateMessage',

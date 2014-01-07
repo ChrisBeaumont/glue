@@ -16,6 +16,9 @@ This functionality doesn't exist in v0.12 and v0.13 -- this module provides
 a fallback implmentation for older IPython versions
 """
 
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import sys
 import atexit
 from contextlib import contextmanager

@@ -2,6 +2,10 @@
 Various standalone utility code for
 working with Qt
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 
 import pkg_resources
@@ -879,10 +883,10 @@ if __name__ == "__main__":
         layer = None
 
         def update(self):
-            print 'update', self.layer_visible
+            print('update', self.layer_visible)
 
         def redraw(self):
-            print 'draw'
+            print('draw')
 
     app = get_qapp()
     f = Foo()
@@ -891,5 +895,5 @@ if __name__ == "__main__":
     rgb.show()
     app.exec_()
 
-    print f.layer_visible
-    print f.contrast_layer
+    print(f.layer_visible)
+    print(f.contrast_layer)

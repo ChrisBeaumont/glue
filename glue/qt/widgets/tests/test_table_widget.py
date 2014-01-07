@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from ..table_widget import DataTableModel
 from ....core import Data
 

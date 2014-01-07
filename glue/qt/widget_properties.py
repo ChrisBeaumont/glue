@@ -16,6 +16,10 @@ Example Use::
     f.bar = True  # equivalent to f._button.setChecked(True)
     assert f.bar == True
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from functools import partial
 
 from .qtutil import pretty_number

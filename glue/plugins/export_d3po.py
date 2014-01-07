@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
 import os
 
@@ -163,7 +166,7 @@ def make_data_file(data, subsets, path):
         c = Column(data=subset.to_mask().astype('i'), name='selection_%i' % i)
         t.add_column(c)
 
-    t.write(data_path, format='ascii', delimiter=',')
+    t.write(data_path, format='ascii', delimiter=b',')
 
 
 def save_d3po(application, path):
@@ -236,7 +239,7 @@ def launch(path):
         except error:  # port already taken
             pass
 
-    print 'Serving D3PO on port 0.0.0.0:%i' % PORT
+    print('Serving D3PO on port 0.0.0.0:%i' % PORT)
     server.server_activate()
 
     thread = Thread(target=server.serve_forever)

@@ -9,6 +9,10 @@ The LinkCollection class and its sublcasses are factories to create
 multiple ComponentLinks easily. They are meant to be passed to
 :func:`DataCollection.add_link()`
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from .component_link import ComponentLink
 from .data import ComponentID
 from ..external.aplpy import gal2fk5, fk52gal

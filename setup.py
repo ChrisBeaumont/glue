@@ -45,6 +45,5 @@ setup(name='Glue',
       packages = find_packages(),
       entry_points={'console_scripts' : console_scripts},
       cmdclass=cmdclass,
-      package_data={'': ['*.png', '*.ui']},
-      use_2to3=True
+      package_data={'': ['*.png', '*.ui']}
     )

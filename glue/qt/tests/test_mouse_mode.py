@@ -1,4 +1,8 @@
 #pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from mock import MagicMock, patch
 import numpy as np
 from numpy.testing import assert_almost_equal

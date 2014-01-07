@@ -1,3 +1,5 @@
+#pylint: disable=I0011, W0613, R0913, R0904, W0611
+
 """
 This module provides two classes for managing LayerArtists with Qt.
 
@@ -7,7 +9,10 @@ LayerManagers.
 The LayerArtistView is a list widget that displays
 these layers, and provides GUI access to the model
 """
-#pylint: disable=I0011, W0613, R0913, R0904, W0611
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from ..external.qt.QtGui import (QColor,
                                  QListView, QAbstractItemView, QAction,
                                  QPalette, QKeySequence)

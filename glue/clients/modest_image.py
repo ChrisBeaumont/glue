@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import matplotlib
 rcParams = matplotlib.rcParams
 
@@ -117,8 +120,8 @@ def main():
     plt.gcf().canvas.draw()
     t1 = time()
 
-    print "Draw time for %s: %0.1f ms" % (artist.__class__.__name__,
-                                          (t1 - t0) * 1000)
+    print("Draw time for %s: %0.1f ms" % (artist.__class__.__name__,
+                                          (t1 - t0) * 1000))
 
     plt.show()
 

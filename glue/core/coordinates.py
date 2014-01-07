@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import logging
 
 import numpy as np
@@ -196,8 +199,7 @@ def coordinates_from_header(header):
     try:
         return WCSCoordinates(header)
     except (AttributeError, TypeError, AssertionError) as e:
-        print e
-        pass
+        print(e)
     return Coordinates()
 
 
@@ -221,8 +223,7 @@ def coordinates_from_wcs(wcs):
     try:
         return WCSCoordinates(hdr, wcs)
     except (AttributeError, TypeError) as e:
-        print e
-        pass
+        print(e)
     return Coordinates()
 
 

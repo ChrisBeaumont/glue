@@ -2,6 +2,10 @@
 Class which embellishes the DataCollectionView with buttons and actions for
 editing the data collection
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import operator
 
 from ...external.qt.QtGui import (QWidget, QMenu,
@@ -615,7 +619,7 @@ def load_subset(subset):
     try:
         subset.read_mask(file_name)
     except Exception as e:
-        print "Exception raised -- could not load\n%s" % e
+        print("Exception raised -- could not load\n%s" % e)
 
 
 def save_subset(subset):

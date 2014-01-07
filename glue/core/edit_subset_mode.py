@@ -6,6 +6,10 @@
    EditSubsetMode object a singleton.
 """
 #pylint: disable=I0011, R0903
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from .decorators import singleton
 from .data import Data
 from .data_collection import DataCollection

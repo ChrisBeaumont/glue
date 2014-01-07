@@ -1,4 +1,8 @@
-# pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103,R0903,R0904
+#pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103,R0903,R0904
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import pytest
 import numpy as np
 from mock import MagicMock
@@ -159,9 +163,9 @@ class TestData(object):
         self.data.add_component(comp, compid)
 
         pricomps = self.data.primary_components
-        print self.comp_id, compid, pricomps
-        print self.comp_id in pricomps
-        print compid not in pricomps
+        print(self.comp_id, compid, pricomps)
+        print(self.comp_id in pricomps)
+        print(compid not in pricomps)
         assert self.comp_id in pricomps
         assert compid not in pricomps
 

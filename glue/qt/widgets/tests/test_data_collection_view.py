@@ -1,4 +1,8 @@
 #pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from ..data_collection_view import DataCollectionView
 from .... import core
 from ....tests import example_data
@@ -9,7 +13,7 @@ class Printer(core.hub.HubListener):
         hub.subscribe(self, core.message.Message, self.print_msg)
 
     def print_msg(self, message):
-        print message
+        print(message)
 
 
 class TestDataCollectionView(object):

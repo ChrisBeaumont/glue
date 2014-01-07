@@ -1,4 +1,8 @@
-# pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103
+#pylint: disable=I0011,W0613,W0201,W0212,E1101,E1103
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import pytest
 
 import numpy as np
@@ -518,7 +522,7 @@ class TestScatterClient(object):
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
 
-        print xlim, ylim, self.client.xflip, self.client.yflip
+        print(xlim, ylim, self.client.xflip, self.client.yflip)
         assert xlim[0] == self.client.xmin
         assert xlim[1] == self.client.xmax
         assert ylim[0] == self.client.ymin

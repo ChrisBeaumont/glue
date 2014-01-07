@@ -50,6 +50,10 @@ new saver and loader version. This ensures Glue can still load old
 serialization protocols. Versions must be sequential integers,
 starting from 1.
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from itertools import count
 from collections import defaultdict
 import json

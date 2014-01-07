@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from ...external.qt.QtGui import QDialog
 
 from ... import core
@@ -130,9 +133,9 @@ def main():
 
     CustomComponentWidget.create_component(data)
     for d in data:
-        print d.label
+        print(d.label)
         for c in d.components:
-            print '\t%s' % c
+            print('\t%s' % c)
 
 if __name__ == "__main__":
     main()

@@ -12,6 +12,9 @@ http://qt-project.org/wiki/Differences_Between_PySide_and_PyQt
 Do not use this if you need PyQt with the old QString/QVariant API.
 """
 
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 import sys
 

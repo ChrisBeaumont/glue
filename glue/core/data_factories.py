@@ -27,6 +27,10 @@ Putting this together, the simplest data factory code looks like this:
     __factories__.append(dummy_factory)
     set_default_factory("foo", dummy_factory)
 """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 
 import numpy as np
