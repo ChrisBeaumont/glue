@@ -2,6 +2,8 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import operator
+import numbers
+
 import numpy as np
 
 from .visual import VisualAttributes, RED
@@ -277,6 +279,9 @@ class Subset(object):
         return (self.subset_state == other.subset_state and
                 self.style == other.style)
 
+    # In Python 3, if __eq__ is defined, then __hash__ has to be re-defined
+    __hash__ = object.__hash__
+
 
 class SubsetState(object):
 
@@ -450,13 +455,13 @@ class InequalitySubsetState(SubsetState):
         if op not in valid_ops:
             raise TypeError("Invalid boolean operator: %s" % op)
         if not isinstance(left, ComponentID) and not \
-                operator.isNumberType(left) and not \
-                isinstance(left, ComponentLink):
+               isinstance(left, numbers.Number) and not \
+               isinstance(left, ComponentLink):
             raise TypeError("Input must be ComponenID or NumberType: %s"
                             % type(left))
         if not isinstance(right, ComponentID) and not \
-                operator.isNumberType(right) and not \
-                isinstance(right, ComponentLink):
+               isinstance(right, numbers.Number) and not \
+               isinstance(right, ComponentLink):
             raise TypeError("Input must be ComponenID or NumberType: %s"
                             % type(right))
         self._left = left
@@ -479,11 +484,11 @@ class InequalitySubsetState(SubsetState):
     def to_mask(self, view=None):
         from .data import ComponentID
         left = self._left
-        if not operator.isNumberType(self._left):
+        if not isinstance(self._left, numbers.Number):
             left = self.parent.data[self._left, view]
 
         right = self._right
-        if not operator.isNumberType(self._right):
+        if not isinstance(self._right, numbers.Number):
             right = self.parent.data[self._right, view]
 
         return self._operator(left, right)

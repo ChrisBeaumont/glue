@@ -40,7 +40,7 @@ def save_page(page, page_number, label, subset):
     result['histogramStyle'] = result['markerStyle']
 
     # save each plot
-    result['plots'] = map(save_plot, page, range(len(page)))
+    result['plots'] = list(map(save_plot, page, range(len(page))))
 
     return result
 
@@ -197,10 +197,10 @@ def save_d3po(application, path):
     result = {}
     result['filename'] = 'data.csv'  # XXX don't think this is needed?
     result['title'] = "Glue export of %s" % data.label
-    result['states'] = map(save_page, application.viewers,
-                           range(len(viewers)),
-                           application.tab_names,
-                           subsets)
+    result['states'] = list(map(save_page, application.viewers,
+                                range(len(viewers)),
+                                application.tab_names,
+                                subsets))
 
     state_path = os.path.join(path, 'states.json')
     with open(state_path, 'w') as outfile:

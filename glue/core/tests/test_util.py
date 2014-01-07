@@ -156,7 +156,7 @@ def test_colorize_subsets_clip():
 def test_coerce_numeric():
     from ..util import coerce_numeric
 
-    x = np.array(['1', '2', '3.14', '4'])
+    x = np.array(['1', '2', '3.14', '4'], dtype="S4")
 
     np.testing.assert_array_equal(coerce_numeric(x),
                                   [1, 2, 3.14, 4])

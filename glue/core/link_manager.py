@@ -5,6 +5,7 @@ import logging
 
 from .data import DerivedComponent
 from .link_helpers import LinkCollection
+from ..external import six
 
 
 def accessible_links(cids, links):
@@ -183,7 +184,7 @@ class LinkManager(object):
 
         """
         links = discover_links(data, self._links)
-        for cid, link in links.iteritems():
+        for cid, link in six.iteritems(links):
             d = DerivedComponent(data, link)
             data.add_component(d, cid)
 

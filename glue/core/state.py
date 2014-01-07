@@ -74,6 +74,7 @@ from .util import lookup_class
 from .roi import Roi
 from . import glue_pickle as gp
 from .. import core
+from ..external import six
 
 literals = tuple([types.NoneType, types.FloatType,
                  types.IntType, types.LongType,
@@ -376,7 +377,7 @@ class GlueUnSerializer(object):
 
     @core.registry.disable
     def object(self, obj_id):
-        if isinstance(obj_id, basestring):
+        if isinstance(obj_id, six.string_types):
             if obj_id in self._objs:
                 return self._objs[obj_id]
 
@@ -399,7 +400,7 @@ class GlueUnSerializer(object):
 
         obj = func(rec, self)
 
-        if isinstance(obj_id, basestring):
+        if isinstance(obj_id, six.string_types):
             self._objs[obj_id] = obj
             self._working.remove(obj_id)
 
@@ -517,15 +518,15 @@ def _save_data_collection(dc, context):
     cids = [c for data in dc for c in data.component_ids()]
     components = [data.get_component(c)
                   for data in dc for c in data.component_ids()]
-    return dict(data=map(context.id, dc),
-                links=map(context.id, dc.links),
-                cids=map(context.id, cids),
-                components=map(context.id, components))
+    return dict(data=list(map(context.id, dc)),
+                links=list(map(context.id, dc.links)),
+                cids=list(map(context.id, cids)),
+                components=list(map(context.id, components)))
 
 
 @loader(DataCollection)
 def _load_data_collection(rec, context):
-    dc = DataCollection(map(context.object, rec['data']))
+    dc = DataCollection(list(map(context.object, rec['data'])))
     for link in rec['links']:
         dc.add_link(context.object(link))
     return dc
@@ -552,7 +553,7 @@ def _load_data(rec, context):
     # we override this function. This is pretty ugly
     result._create_pixel_and_world_components = lambda: None
 
-    comps = [map(context.object, [cid, comp])
+    comps = [list(map(context.object, [cid, comp]))
              for cid, comp in rec['components']]
     comps = sorted(comps,
                    key=lambda x: isinstance(x[1], (DerivedComponent,
@@ -620,8 +621,8 @@ def _load_derived_component(rec, context):
 
 @saver(ComponentLink)
 def _save_component_link(link, context):
-    frm = map(context.id, [context.id(f) for f in link.get_from_ids()])
-    to = map(context.id, [link.get_to_id()])
+    frm = list(map(context.id, [context.id(f) for f in link.get_from_ids()]))
+    to = list(map(context.id, [link.get_to_id()]))
     using = context.do(link.get_using())
     inverse = context.do(link.get_inverse())
     hidden = link.hidden
@@ -630,7 +631,7 @@ def _save_component_link(link, context):
 
 @loader(ComponentLink)
 def _load_component_link(rec, context):
-    frm = map(context.object, rec['frm'])
+    frm = list(map(context.object, rec['frm'])
     to = map(context.object, rec['to'])[0]
     using = context.object(rec['using'])
     inverse = context.object(rec['inverse'])
@@ -641,8 +642,8 @@ def _load_component_link(rec, context):
 
 @saver(CoordinateComponentLink)
 def _save_coordinate_component_link(link, context):
-    frm = map(context.id, [context.id(f) for f in link._from_all])
-    to = map(context.id, [link.get_to_id()])
+    frm = list(map(context.id, [context.id(f) for f in link._from_all]))
+    to = list(map(context.id, [link.get_to_id()]))
     coords = context.id(link.coords)
     index = link.index
     pix2world = link.pixel2world

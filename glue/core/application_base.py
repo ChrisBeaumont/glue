@@ -168,7 +168,7 @@ class Application(HubListener):
         raise NotImplementedError()
 
     def __gluestate__(self, context):
-        viewers = [map(context.id, tab) for tab in self.viewers]
+        viewers = [list(map(context.id, tab)) for tab in self.viewers]
         data = self.session.data_collection
 
         return dict(session=context.id(self.session), viewers=viewers,
@@ -327,7 +327,7 @@ class ViewerBase(HubListener, PropertySetMixin):
                     pos=self.position,
                     properties=dict((k, context.id(v))
                                     for k, v in self.properties.items()),
-                    layers=map(context.do, self.layers)
+                    layers=list(map(context.do, self.layers))
                     )
 
     @classmethod

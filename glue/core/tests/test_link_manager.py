@@ -161,7 +161,7 @@ class TestLinkManager(object):
     def test_update_data_components_adds_correctly(self):
         example_components(self, add_derived=False)
         lm = LinkManager()
-        map(lm.add_link, self.links)
+        list(map(lm.add_link, self.links))
 
         lm.update_data_components(self.data)
         derived = set(self.data.derived_components)
@@ -172,7 +172,7 @@ class TestLinkManager(object):
         #add all but last link to manager
         example_components(self, add_derived=False)
         lm = LinkManager()
-        map(lm.add_link, self.links[:-1])
+        list(map(lm.add_link, self.links[:-1]))
 
         #manually add last link as derived component
         dc = DerivedComponent(self.data, self.links[-1])

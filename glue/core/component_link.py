@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import logging
 import operator
+import numbers
 
 import numpy as np
 
@@ -288,7 +289,7 @@ class BinaryComponentLink(ComponentLink):
             from_.append(left)
         elif isinstance(left, ComponentLink):
             from_.extend(left.get_from_ids())
-        elif not operator.isNumberType(left):
+        elif not isinstance(left, numbers.Number):
             raise TypeError("Cannot create BinaryComponentLink using %s" %
                             left)
 
@@ -296,7 +297,7 @@ class BinaryComponentLink(ComponentLink):
             from_.append(right)
         elif isinstance(right, ComponentLink):
             from_.extend(right.get_from_ids())
-        elif not operator.isNumberType(right):
+        elif not isinstance(right, numbers.Number):
             raise TypeError("Cannot create BinaryComponentLink using %s" %
                             right)
 
@@ -318,9 +319,9 @@ class BinaryComponentLink(ComponentLink):
     def compute(self, data, view=None):
         l = self._left
         r = self._right
-        if not operator.isNumberType(self._left):
+        if not isinstance(self._left, numbers.Number):
             l = data[self._left, view]
-        if not operator.isNumberType(self._right):
+        if not isinstance(self._right, numbers.Number):
             r = data[self._right, view]
         return self._op(l, r)
 

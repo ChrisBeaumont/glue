@@ -15,7 +15,7 @@ from ..hub import Hub
 from ..exceptions import IncompatibleAttribute
 from ..component_link import ComponentLink
 from ..registry import Registry
-
+from ...external import six
 
 class TestCoordinates(Coordinates):
 
@@ -77,7 +77,7 @@ class TestData(object):
         comp.data.shape = (3, 2)
         with pytest.raises(TypeError) as exc:
             self.data.add_component(comp("junk label"))
-        if isinstance(exc.value, basestring):  # python 2.6
+        if isinstance(exc.value, six.string_types):  # python 2.6
             assert exc.value == ("add_component() takes at least 3 "
                                  "arguments (2 given)")
         else:

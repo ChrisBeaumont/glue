@@ -22,6 +22,7 @@ from .message import (DataUpdateMessage,
                       SubsetCreateMessage, ComponentsChangedMessage)
 
 from .odict import OrderedDict
+from ..external import six
 
 __all__ = ['ComponentID', 'Component', 'DerivedComponent', 'Data',
            'CoordinateComponent']
@@ -533,7 +534,7 @@ class Data(object):
 
         if isinstance(label, ComponentID):
             component_id = label
-        elif isinstance(label, basestring):
+        elif isinstance(label, six.string_types):
             component_id = ComponentID(label, hidden=hidden)
         else:
             raise TypeError("label must be a ComponentID or string")
@@ -568,7 +569,7 @@ class Data(object):
             The DerivedComponent that was added
         """
         if cid is not None:
-            if isinstance(cid, basestring):
+            if isinstance(cid, six.string_types):
                 cid = ComponentID(cid)
             link.set_to_id(cid)
 
@@ -841,7 +842,7 @@ class Data(object):
         :type key: :class:`~glue.core.data.ComponentID`
         """
         key, view = split_component_view(key)
-        if isinstance(key, basestring):
+        if isinstance(key, six.string_types):
             _k = key
             key = self.find_component_id(key)
             if key is None:

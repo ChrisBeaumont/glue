@@ -9,7 +9,7 @@ import numpy as np
 from .core import Data, DataCollection, ComponentLink
 from .core.link_helpers import MultiLink
 from .core.data_factories import load_data, as_list
-
+from .external import six
 
 @contextmanager
 def restore_io():
@@ -72,7 +72,7 @@ _parsers = {}  # map base classes -> parser functions
 _parsers[dict] = _parse_data_dict
 _parsers[np.recarray] = _parse_data_recarray
 _parsers[Data] = _parse_data_glue_data
-_parsers[basestring] = _parse_data_path
+_parsers[six.string_types] = _parse_data_path
 
 
 def _parse_data(data, label):
@@ -120,12 +120,12 @@ def _parse_links(dc, links):
             u2 = link[3]
 
         #component names -> component IDs
-        if isinstance(f, basestring):
+        if isinstance(f, six.string_types):
             f = [find_cid(f)]
         else:
             f = [find_cid(item) for item in f]
 
-        if isinstance(t, basestring):
+        if isinstance(t, six.string_types):
             t = find_cid(t)
             result.append(ComponentLink(f, t, u))
         else:

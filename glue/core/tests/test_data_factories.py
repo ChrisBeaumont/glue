@@ -71,7 +71,7 @@ def test_fits_catalog_factory():
                           (' ', '.dat'),
                           ('\t', '.tbl')))
 def test_ascii_catalog_factory(delim, suffix):
-    data = b"#a%sb\n1%s2" % (delim, delim)
+    data = bytes("#a%sb\n1%s2" % (delim, delim), 'ascii')
     with make_file(data, suffix) as fname:
         d = df.load_data(fname)
         assert df.find_factory(fname) is df.tabular_data

@@ -256,7 +256,7 @@ class ScatterClient(Client):
             self._update_ticks(coord)
 
         # update plots
-        map(self._update_layer, self.artists.layers)
+        list(map(self._update_layer, self.artists.layers))
 
         if coord == 'x' and snap:
             self._snap_xlim()
