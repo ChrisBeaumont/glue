@@ -631,7 +631,7 @@ def _save_component_link(link, context):
 
 @loader(ComponentLink)
 def _load_component_link(rec, context):
-    frm = list(map(context.object, rec['frm'])
+    frm = list(map(context.object, rec['frm']))
     to = map(context.object, rec['to'])[0]
     using = context.object(rec['using'])
     inverse = context.object(rec['inverse'])
