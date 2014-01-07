@@ -13,6 +13,7 @@ from ...external.qt.QtGui import (QWidget, QMenu,
 
 
 from ...external.qt.QtCore import Qt, Signal, QObject
+from ...external.six.moves import reduce
 
 from ..ui.layertree import Ui_LayerTree
 

@@ -18,6 +18,9 @@ class TreeTraversal(object):
     def next(self):
         raise NotImplementedError()
 
+    def __next__(self):
+        return self.next()
+
 
 class PreOrderTraversal(TreeTraversal):
 

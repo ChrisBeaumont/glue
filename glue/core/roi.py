@@ -813,7 +813,7 @@ class MplPolygonalROI(AbstractMplRoi):
         AbstractMplRoi.__init__(self, ax)
         self.plot_opts = {'edgecolor': PATCH_COLOR, 'facecolor': PATCH_COLOR,
                           'alpha': 0.3}
-        self._patch = Polygon(np.array(zip([0, 1], [0, 1])))
+        self._patch = Polygon(np.array(list(zip([0, 1], [0, 1]))))
         self._patch.set_zorder(100)
         self._patch.set(**self.plot_opts)
         self._setup_patch()
@@ -832,8 +832,8 @@ class MplPolygonalROI(AbstractMplRoi):
             self._patch.set_visible(False)
         else:
             x, y = self._roi.to_polygon()
-            self._patch.set_xy(zip(x + [x[0]],
-                                   y + [y[0]]))
+            self._patch.set_xy(list(zip(x + [x[0]],
+                                        y + [y[0]])))
             self._patch.set_visible(True)
 
         # Update appearance
