@@ -265,6 +265,9 @@ def coerce_numeric(arr):
         lens = np.char.str_len(arr)
         lmax = lens.max()
         nonnull = lens > 0
+        # genfromtext cannot accept unicode arrays, so we have to encode
+        if arr.dtype.kind == "U":
+            arr = np.char.encode(arr, 'ascii')
         coerced = np.genfromtxt(arr, delimiter=lmax + 1)
         has_missing = not nonnull.all()
         dtype = np.float if has_missing else coerced.dtype
