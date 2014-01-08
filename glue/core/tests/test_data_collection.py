@@ -112,7 +112,7 @@ class TestDataCollection(object):
         """Type error is raised if hub is not a Hub object"""
         with pytest.raises(TypeError) as exc:
             self.dc.register_to_hub(3)
-        assert exc.value.args[0] == "Input is not a Hub object: <type 'int'>"
+        assert exc.value.args[0].startswith("Input is not a Hub object:")
 
     def test_register_assigns_hub_of_data(self):
         self.dc.append(self.data)

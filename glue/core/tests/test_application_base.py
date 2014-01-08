@@ -9,6 +9,7 @@ from mock import MagicMock
 
 from ..application_base import Application
 from .. import Data
+from ...external.six.moves import cPickle as pickle
 
 
 class MockApplication(Application):

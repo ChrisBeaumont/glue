@@ -151,8 +151,8 @@ def read_table_fits(input, hdu=None):
                 if hdu is None:
                     warnings.warn("hdu= was not specified but multiple tables"
                                   " are present, reading in first available"
-                                  " table (hdu={0})".format(tables.keys()[0]))
-                    hdu = tables.keys()[0]
+                                  " table (hdu={0})".format(list(tables.keys())[0]))
+                    hdu = list(tables.keys())[0]
 
                 # hdu might not be an integer, so we first need to convert it
                 # to the correct HDU index
@@ -164,7 +164,7 @@ def read_table_fits(input, hdu=None):
                     raise ValueError("No table found in hdu={0}".format(hdu))
 
             elif len(tables) == 1:
-                table = tables[tables.keys()[0]]
+                table = tables[list(tables.keys())[0]]
             else:
                 raise ValueError("No table found")
 

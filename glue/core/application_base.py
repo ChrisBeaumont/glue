@@ -22,7 +22,7 @@ def catch_error(msg):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
-                m = "%s\n%s" % (msg, e.message)
+                m = "%s\n%s" % (msg, str(e))
                 detail = str(traceback.format_exc())
                 self = args[0]
                 self.report_error(m, detail)
