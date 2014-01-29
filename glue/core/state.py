@@ -59,7 +59,6 @@ from collections import defaultdict
 import json
 import types
 import logging
-from cStringIO import StringIO
 
 import numpy as np
 
@@ -75,12 +74,13 @@ from .roi import Roi
 from . import glue_pickle as gp
 from .. import core
 from ..external import six
+from ..external.six import StringIO
 
-literals = tuple([types.NoneType, types.FloatType,
-                 types.IntType, types.LongType,
-                 types.NoneType, types.StringType,
-                 types.BooleanType, types.UnicodeType, types.ListType,
-                 tuple])
+literals = tuple([type(None), float, int, bytes, bool, str, list, tuple])
+
+if six.PY2:
+    literals += long
+    literals += unicode
 literals += np.ScalarType
 
 _lookup = lookup_class
@@ -243,8 +243,10 @@ class GlueSerializer(object):
         sz = -1
         while sz != len(self._objs):
             sz = len(self._objs)
-            result = dict((oid, self.do(obj))
-                          for oid, obj in self._objs.items())
+            # we need to construct this in two steps otherwise we get a
+            # 'dictionary changed size during iteration' error.
+            result = [(oid, self.do(obj)) for oid, obj in self._objs.items()]
+            result = dict(result)
         return result
 
     def do(self, obj):

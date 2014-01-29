@@ -586,7 +586,7 @@ class TestCategoricalScatterClient(TestScatterClient):
 
         data = core.Data()
         alpha_cat_data = list('abcdefghijklmnopqrstuv')
-        numer_cat_data = list('01' * (len(alpha_cat_data) / 2))
+        numer_cat_data = list('01' * int(len(alpha_cat_data) / 2))
         data.add_component(
             core.data.CategoricalComponent(alpha_cat_data), 'xcat')
         data.add_component(
@@ -660,7 +660,6 @@ class TestCategoricalScatterClient(TestScatterClient):
         assert timer < 3  # this is set for Travis speed
 
     def test_nan_cardinality(self):
-        print 'nan test start'
         card = 50
         data = core.Data()
         card_data = [np.nan] + [str(num) for num in range(card)]

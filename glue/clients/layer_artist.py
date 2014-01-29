@@ -15,6 +15,7 @@ from ..core.util import color2rgb, PropertySetMixin
 from ..core.subset import Subset
 from .util import view_cascade, get_extent
 from .ds9norm import DS9Normalize
+from ..external.six.moves import reduce
 
 
 class ChangedTrigger(object):

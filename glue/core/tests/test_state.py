@@ -16,6 +16,7 @@ from ...qt.widgets.histogram_widget import HistogramWidget
 from .util import make_file
 from ..data_factories import load_data
 from .test_data_factories import TEST_FITS_DATA
+from ..external.six import cStringIO
 
 
 def clone(object):
@@ -68,7 +69,6 @@ def test_save_numpy_scalar():
 
 def tests_data_factory_double():
 
-    from cStringIO import StringIO
     from astropy.io import fits
     d = np.random.normal(0, 1, (100, 100, 100))
     s = StringIO()
