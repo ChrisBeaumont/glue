@@ -322,3 +322,5 @@ class QtLayerArtistContainer(LayerArtistContainer):
 
     def __nonzero__(self):
         return True
+
+    __bool__ = __nonzero__

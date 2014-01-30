@@ -194,6 +194,7 @@ class HistogramWidget(DataViewer):
         self.client.add_layer(data)
         self._update_attributes()
         self._update_minmax_labels()
+        assert self.data_present(data), list(self._container)
         return True
 
     def add_subset(self, subset):

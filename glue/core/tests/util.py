@@ -25,8 +25,8 @@ def make_file(contents, suffix, decompress=False):
 
     try:
         _, fname = tempfile.mkstemp(suffix=suffix)
-        with open(fname, 'wb') as infile:
-            infile.write(contents)
+        with open(fname, 'wb') as outfile:
+            outfile.write(contents)
         yield fname
     finally:
         os.unlink(fname)

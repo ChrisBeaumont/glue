@@ -876,7 +876,7 @@ class Data(object):
         if component_id is None:
             raise IncompatibleAttribute("None not in data set")
 
-        if isinstance(component_id, basestring):
+        if isinstance(component_id, six.string_types):
             component_id = self.id[component_id]
 
         try:

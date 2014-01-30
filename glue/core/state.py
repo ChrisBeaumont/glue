@@ -74,14 +74,15 @@ from .roi import Roi
 from . import glue_pickle as gp
 from .. import core
 from ..external import six
-from ..external.six import StringIO
+from io import BytesIO
+from base64 import b64encode, b64decode
+
 
 literals = tuple([type(None), float, int, bytes, bool, str, list, tuple])
 
 if six.PY2:
-    literals += long
-    literals += unicode
-literals += np.ScalarType
+    literals += (long, unicode)
+literals += (np.ScalarType,)
 
 _lookup = lookup_class
 
@@ -245,7 +246,7 @@ class GlueSerializer(object):
             sz = len(self._objs)
             # we need to construct this in two steps otherwise we get a
             # 'dictionary changed size during iteration' error.
-            result = [(oid, self.do(obj)) for oid, obj in self._objs.items()]
+            result = [(oid, self.do(obj)) for oid, obj in list(self._objs.items())]
             result = dict(result)
         return result
 
@@ -316,8 +317,8 @@ class GlueSerializer(object):
 
         Can be used as default kwarg in json.dumps/json.dump
         """
-        if np.isscalar(o):
-            return np.asscalar(o)  # coerce to pure-python type
+        if np.isscalar(o) and isinstance(o, np.generic):
+            return np.asscalar(o)  # coerce numpy number to pure-python type
         if isinstance(o, tuple):
             return list(o)
         return o
@@ -572,8 +573,8 @@ def _load_data(rec, context):
 
     assert len(coord) == result.ndim * 2
 
-    result._world_component_ids = coord[:len(coord) / 2]
-    result._pixel_component_ids = coord[len(coord) / 2:]
+    result._world_component_ids = coord[:len(coord) // 2]
+    result._pixel_component_ids = coord[len(coord) // 2:]
 
     for s in rec['subsets']:
         result.add_subset(context.object(s))
@@ -634,7 +635,7 @@ def _save_component_link(link, context):
 @loader(ComponentLink)
 def _load_component_link(rec, context):
     frm = list(map(context.object, rec['frm']))
-    to = map(context.object, rec['to'])[0]
+    to = list(map(context.object, rec['to']))[0]
     using = context.object(rec['using'])
     inverse = context.object(rec['inverse'])
     result = ComponentLink(frm, to, using, inverse)
@@ -655,11 +656,11 @@ def _save_coordinate_component_link(link, context):
 
 @loader(CoordinateComponentLink)
 def _load_coordinate_component_link(rec, context):
-    to = map(context.object, rec['to'])[0]  # XXX why is this a list?
+    to = list(map(context.object, rec['to']))[0]  # XXX why is this a list?
     coords = context.object(rec['coords'])
     index = rec['index']
     pix2world = rec['pix2world']
-    frm = map(context.object, rec['frm'])
+    frm = list(map(context.object, rec['frm']))
 
     return CoordinateComponentLink(frm, to, coords, index, pix2world)
 
@@ -688,14 +689,13 @@ def _save_session(session, context):
 
 @loader(np.ndarray)
 def _load_numpy(rec, context):
-    s = StringIO(rec['data'].decode('base64'))
+    s = BytesIO(b64decode(rec['data']))
     return np.load(s)
 
 
 @saver(np.ndarray)
 def _save_numpy(obj, context):
-    f = StringIO()
+    f = BytesIO()
     np.save(f, obj)
-    f.seek(0)
-    data = f.read().encode('base64')
+    data = b64encode(f.getvalue()).decode('ascii')
     return dict(data=data)
