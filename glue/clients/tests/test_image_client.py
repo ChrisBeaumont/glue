@@ -15,6 +15,11 @@ from ..image_client import MplImageClient
 
 from .util import renderless_figure
 
+# TODO: many tests require scipy because of the percentile stuff, which can be
+# switched to using the version implemented in imageutils/astropy (which could
+# be coped into glue since it is really essential to the color scaling)
+from ...tests.helpers import requires_scipy
+
 FIGURE = renderless_figure()
 
 
@@ -112,10 +117,12 @@ class TestMplImageClient(object):
         assert exc.value.args[0] == ("Data not managed by client's "
                                      "data collection")
 
+    @requires_scipy
     def test_set_data(self):
         client = self.create_client_with_image()
         assert client.display_data is self.im
 
+    @requires_scipy
     def test_slice_disabled_for_2d(self):
         client = self.create_client_with_image()
         assert client.slice_ind is None
@@ -130,6 +137,7 @@ class TestMplImageClient(object):
             client.slice_ind = 10
         assert exc.value.args[0] == "Can only set slice_ind for 3D images"
 
+    @requires_scipy
     def test_slice_enabled_for_3D(self):
         client = self.create_client_with_cube()
         assert client.slice_ind is not None
@@ -155,6 +163,7 @@ class TestMplImageClient(object):
         assert not self.im in client.artists
         assert not s in client.artists
 
+    @requires_scipy
     def test_set_norm(self):
         client = self.create_client_with_image()
         assert client.display_data is not None
@@ -163,11 +172,13 @@ class TestMplImageClient(object):
             assert a.norm.clip_lo == 3
             assert a.norm.clip_hi == 97
 
+    @requires_scipy
     def test_delete_data(self):
         client = self.create_client_with_image()
         client.delete_layer(self.im)
         assert not self.im in client.artists
 
+    @requires_scipy
     def test_set_attribute(self):
         client = self.create_client_with_image()
         atts = self.im.component_ids()
@@ -176,6 +187,7 @@ class TestMplImageClient(object):
             client.set_attribute(att)
             assert client.display_attribute is att
 
+    @requires_scipy
     def test_get_attribute(self):
         client = self.create_client_with_image()
         atts = self.im.component_ids()
@@ -184,6 +196,7 @@ class TestMplImageClient(object):
             client.set_attribute(att)
             assert client.display_attribute is att
 
+    @requires_scipy
     def test_set_data_and_attribute(self):
         client = self.create_client_with_image()
         atts = self.im.component_ids()
@@ -193,12 +206,14 @@ class TestMplImageClient(object):
             assert client.display_attribute is att
             assert client.display_data is self.im
 
+    @requires_scipy
     def test_slice_ori_on_2d_raises(self):
         client = self.create_client_with_image()
         with pytest.raises(IndexError) as exc:
             client.set_slice_ori(0)
         assert exc.value.args[0] == "Can only set slice_ori for 3D images"
 
+    @requires_scipy
     def test_slice_ori_out_of_bounds(self):
         client = self.create_client_with_image()
         self.collect.append(self.cube)
@@ -207,6 +222,7 @@ class TestMplImageClient(object):
             client.set_slice_ori(100)
         assert exc.value.args[0] == "Orientation must be 0, 1, or 2"
 
+    @requires_scipy
     def test_apply_roi_2d(self):
         """apply_roi is applied to all edit_subsets"""
         client = self.create_client_with_image()
@@ -222,6 +238,7 @@ class TestMplImageClient(object):
         assert state.xatt is self.im.get_pixel_component_id(1)
         assert state.yatt is self.im.get_pixel_component_id(0)
 
+    @requires_scipy
     def test_apply_roi_3d(self):
         client = self.create_client_with_cube()
         self.cube.coords = DummyCoords()
@@ -255,9 +272,11 @@ class TestMplImageClient(object):
         assert roi2.to_polygon()[0] == roi.to_polygon()[0]
         assert roi2.to_polygon()[1] == roi.to_polygon()[1]
 
+    @requires_scipy
     def test_apply_roi_draws_once(self):
         assert MplImageClient.apply_roi._is_deferred
 
+    @requires_scipy
     def test_update_subset_deletes_artist_on_error(self):
         client = self.create_client_with_image()
         sub = self.im.edit_subset
@@ -273,11 +292,13 @@ class TestMplImageClient(object):
         client._update_subset_single(sub)
         assert m.call_count == 2
 
+    @requires_scipy
     def test_subsets_shown_on_init(self):
         client = self.create_client_with_image()
         subset = self.im.edit_subset
         assert subset in client.artists
 
+    @requires_scipy
     def test_axis_labels(self):
         client = self.create_client_with_image()
         client.refresh()
@@ -285,12 +306,14 @@ class TestMplImageClient(object):
         assert ax.get_xlabel() == 'World 1'
         assert ax.get_ylabel() == 'World 0'
 
+    @requires_scipy
     def test_add_scatter_layer(self):
         client = self.create_client_with_image_and_scatter()
         assert self.scatter in client.artists
         for a in client.artists[self.scatter]:
             assert a.visible
 
+    @requires_scipy
     def test_data_scatter_emphasis_updates_on_slice_change(self):
         # regression test for 367
         client = self.create_client_with_cube_and_scatter()
@@ -299,6 +322,7 @@ class TestMplImageClient(object):
         client.slice = (2, 'y', 'x')
         assert layer.emphasis is not emph0
 
+    @requires_scipy
     def test_check_update(self):
         client = self.create_client_with_image()
         mm = MagicMock()
@@ -312,6 +336,7 @@ class TestMplImageClient(object):
         client.check_update(None)
         assert mm.call_count > ct
 
+    @requires_scipy
     def test_set_cmap(self):
         from matplotlib.cm import bone
         client = self.create_client_with_image()
@@ -320,6 +345,7 @@ class TestMplImageClient(object):
         for a in client.artists[self.im]:
             assert a.cmap is bone
 
+    @requires_scipy
     def test_bad_attribute(self):
         """Shoudl raise IncompatibleAttribute on bad input"""
         client = self.create_client_with_image()
@@ -328,6 +354,7 @@ class TestMplImageClient(object):
             client.set_attribute('bad')
         assert exc.value.args[0] == "Attribute not in data's attributes: bad"
 
+    @requires_scipy
     def test_sticky_norm(self):
         """Norm scaling for each component should be remembered"""
         client = self.create_client_with_image()
@@ -350,6 +377,7 @@ class TestMplImageClient(object):
         assert n.clip_lo == 7
         assert n.clip_hi == 80
 
+    @requires_scipy
     def test_scatter_persistent(self):
         """Ensure that updates to data plot don't erase scatter artists"""
         client = self.create_client_with_image_and_scatter()
@@ -357,6 +385,7 @@ class TestMplImageClient(object):
         client._update_data_plot()
         assert self.scatter in client.artists
 
+    @requires_scipy
     def test_scatter_sync(self):
         """ Regression test for #360 """
         client = self.create_client_with_image_and_scatter()
@@ -374,6 +403,7 @@ class TestMplImageClient(object):
         client._update_subset_single(subset)
         assert client.artists[subset][0].artists is not art
 
+    @requires_scipy
     def test_image_hide_persistent(self):
         """If image layer is disabled, it should stay disabled after update"""
         client = self.create_client_with_image()
@@ -385,6 +415,7 @@ class TestMplImageClient(object):
             for aa in a.artists:
                 assert not aa.get_visible()
 
+    @requires_scipy
     def test_scatter_subsets_not_auto_added(self):
         """Scatter subsets should not be added by
         SubsetAddMessage"""
@@ -397,6 +428,7 @@ class TestMplImageClient(object):
         s = self.scatter.new_subset()
         assert s not in c.artists
 
+    @requires_scipy
     def test_scatter_layer_does_not_set_display_data(self):
         c = self.create_client_with_image()
         self.collect.append(self.scatter)
@@ -404,6 +436,7 @@ class TestMplImageClient(object):
         c.set_data(self.scatter)
         assert c.display_data is d
 
+    @requires_scipy
     def test_rgb_mode_toggle(self):
         c = self.create_client_with_image()
         im = c.rgb_mode(True)
@@ -412,6 +445,7 @@ class TestMplImageClient(object):
         assert isinstance(c.rgb_mode(False), ImageLayerArtist)
         assert c.rgb_mode() is None
 
+    @requires_scipy
     def test_rgb_enabled_on_creation(self):
         """
         Artist show render when first created.
@@ -421,6 +455,7 @@ class TestMplImageClient(object):
         artist = c.rgb_mode(True)
         assert artist.enabled
 
+    @requires_scipy
     def test_transpose(self):
         c = self.create_client_with_image()
         shp = self.im.shape
@@ -430,10 +465,12 @@ class TestMplImageClient(object):
         assert c._ax.get_xlabel() == 'World 0'
         assert c._ax.get_ylabel() == 'World 1'
 
+    @requires_scipy
     def test_4d(self):
         c = self.create_client_with_hypercube()
         assert c.display_data is self.cube4
 
+    @requires_scipy
     def test_slice_move_retains_zoom(self):
         # regression test for #224
         c = self.create_client_with_cube()
@@ -451,6 +488,7 @@ class TestMplImageClient(object):
         assert client.point_details(3, 5) == expected
 
 
+@requires_scipy
 def test_format_coord_2d():
     """Coordinate display is in world coordinates"""
 
@@ -472,6 +510,7 @@ def test_format_coord_2d():
     assert xy == 'World 0=4         World 1=1'
 
 
+@requires_scipy
 def test_format_coord_3d():
     """Coordinate display is in world coordinates"""
 
