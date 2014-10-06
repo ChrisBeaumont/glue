@@ -57,9 +57,7 @@ class ImageWidget(DataViewer):
         self.client = MplImageClient(self._data,
                                      self.central_widget.canvas.fig,
                                      artist_container=self._container)
-
-        self._setup_tools()
-
+	    self._setup_tools()
         self._tweak_geometry()
 
         self.make_toolbar()
