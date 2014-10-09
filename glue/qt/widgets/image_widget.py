@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function
 
-import numpy as np
-
 from ...external.qt.QtGui import (QAction, QLabel, QCursor, QMainWindow,
                                   QToolButton, QIcon, QMessageBox,
                                   QMdiSubWindow)
@@ -22,9 +20,8 @@ from ...core.callback_property import add_callback
 from .data_slice_widget import DataSlice
 
 from ..mouse_mode import (RectangleMode, CircleMode, PolyMode,
-                          ContrastMode, PathMode)
+                          ContrastMode)
 from ..glue_toolbar import GlueToolbar
-from ..spectrum_tool import SpectrumTool
 from .mpl_widget import MplWidget, defer_draw
 
 from ..qtutil import cmap2pixmap, load_ui, get_icon, nonpartial
