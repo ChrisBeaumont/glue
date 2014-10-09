@@ -58,7 +58,12 @@ class ImageWidget(DataViewer):
         self.client = MplImageClient(self._data,
                                      self.central_widget.canvas.fig,
                                      artist_container=self._container)
-        self._spectrum_tool = SpectrumTool(self)
+
+        # Initialize plug-in tools
+        self._tools = []
+        for tool in config.tool_registry:
+            self._tools.append(tool(self))
+
         self._tweak_geometry()
 
         self.make_toolbar()
