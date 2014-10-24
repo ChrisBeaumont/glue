@@ -2,10 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from functools import wraps
+from abc import ABCMeta, abstractmethod
 
 import numpy as np
 
 from ..external.modest_image import extract_matched_slices
+from ..external.six import add_metaclass
+
 from ..core.exceptions import IncompatibleAttribute
 from ..core.data import Data
 from ..core.util import lookup_class, defer
@@ -33,7 +36,9 @@ def requires_data(func):
     return result
 
 
+@add_metaclass(ABCMeta)
 class ImageClient(VizClient):
+
     display_data = CallbackProperty(None)
     display_attribute = CallbackProperty(None)
 
@@ -45,9 +50,9 @@ class ImageClient(VizClient):
         if self.artists is None:
             self.artists = LayerArtistContainer()
 
-        # slice through ND cube
+        # slice through ND cube. Tuple of the form
         # ('y', 'x', 2)
-        # means current data slice is [:, :, 2], and axis=0 is vertical on plot
+        # means current data slice is [:, :, 2], and axis 0 is vertical on plot
         self._slice = None
 
         # how to extract a downsampled/cropped 2D image to plot
@@ -65,6 +70,28 @@ class ImageClient(VizClient):
         self._norm_cache = {}
 
     def point_details(self, x, y):
+        """
+        Information about a projected location
+
+        The 2D location is inverted into a full N-dimensional
+        pixel location, taking into account how the image is rotated
+        and sliced currently.
+
+        Parameters
+        ----------
+        x : int
+           X location in the projected/sliced view of the data
+        y : float
+           Y location in the projected/sliced view of the data
+
+        Returns
+        -------
+        info : dict
+           pix -> n-dimensional tuple of location in full dataset
+           world -> n-dimensional tuple of world coordinates location
+           labels -> tuple of strings labeling X/Y axis of the current view
+           value -> data value at given location
+        """
         if self.display_data is None:
             return dict(labels=['x=%s' % x, 'y=%s' % y],
                         pix=(x, y), world=(x, y), value=np.nan)
@@ -102,7 +129,8 @@ class ImageClient(VizClient):
                   form "axis_lable_name=world_coordinate_value
 
         :note: pix describes a position in the *data*, not necessarily
-               the image display
+               the image display. Use point_details if you need to work
+               with locations in the projected/sliced image plane
         """
         data = self.display_data
         if data is None:
@@ -206,6 +234,11 @@ class ImageClient(VizClient):
     @slice_ind.setter
     @defer_draw
     def slice_ind(self, value):
+        """
+        Convenience method to change the slice plane for 3D images
+
+        Raises IndexError if the data are not 3D
+        """
         if self.is_3D:
             slc = [s if s in ['x', 'y'] else value for s in self.slice]
             self.slice = slc
@@ -216,7 +249,11 @@ class ImageClient(VizClient):
         else:
             raise IndexError("Can only set slice_ind for 3D images")
 
-    def can_image_data(self, data):
+    @staticmethod
+    def can_image_data(data):
+        """
+        Return whether a dataset can be rendered as an image
+        """
         return data.ndim > 1
 
     def _ensure_data_present(self, data):
@@ -225,6 +262,17 @@ class ImageClient(VizClient):
 
     @defer_draw
     def set_data(self, data, attribute=None):
+        """
+        Assign a new dataset to the image display
+
+        Parametetrs
+        -----------
+        data : :class:`~glue.core.data.Data`
+            The new dataset to image
+        attribute : :class:`~glue.core.data.ComponentID`
+            The component of the data to image. A default
+            will be chosen if not provided.
+        """
         if not self.can_image_data(data):
             return
 
@@ -242,6 +290,14 @@ class ImageClient(VizClient):
         self._redraw()
 
     def set_attribute(self, attribute):
+        """
+        Change which attribute of the dataset to image
+
+        Parameters
+        ----------
+        attribute : :class:`~glue.core.data.ComponentID`
+           Which component to draw
+        """
         if not self.display_data or \
                 attribute not in self.display_data.component_ids():
             raise IncompatibleAttribute(
@@ -268,6 +324,27 @@ class ImageClient(VizClient):
     @requires_data
     @defer_draw
     def set_norm(self, **kwargs):
+        """
+        Update the image normalization.
+
+        Parameters
+        ----------
+        vmin : float
+           Image value to set to black
+        vmax : float
+           Image value to set to white
+        bias : float (0, 1)
+           Normalized Location of middle-grey
+        contrast : float
+           How quickly to ramp from black to white. Negative
+           numbers invert the colormap
+        stretch : string
+           Stretch function. Examples are 'linear', 'log', 'sqrt', 'asinh', etc
+        clip_lo : float (0-100)
+           Data values below clip_lo percentile clipped as black
+        clip_hi : float (0-100)
+           Data values above clip_hi percentile clipped as white
+        """
         for a in self.artists[self.display_data]:
             a.set_norm(**kwargs)
         self._update_data_plot()
@@ -275,6 +352,9 @@ class ImageClient(VizClient):
 
     @requires_data
     def clear_norm(self):
+        """
+        Reset the image normalization
+        """
         for a in self.artists[self.display_data]:
             a.clear_norm()
 
@@ -599,7 +679,7 @@ class ImageClient(VizClient):
                 raise ValueError("Cannot restore layer of type %s" % l)
             l.properties = props
 
-    # subclasses should override the following methods as appropriate
+    @abstractmethod
     def _new_rgb_layer(self, layer):
         """
         Construct and return an RGBImageLayerArtist for the given layer
@@ -611,6 +691,7 @@ class ImageClient(VizClient):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def _new_subset_image_layer(self, layer):
         """
         Construct and return a SubsetImageLayerArtist for the given layer
@@ -622,6 +703,7 @@ class ImageClient(VizClient):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def _new_image_layer(self, layer):
         """
         Construct and return an ImageLayerArtist for the given layer
@@ -633,6 +715,7 @@ class ImageClient(VizClient):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def _new_scatter_layer(self, layer):
         """
         Construct and return a ScatterLayerArtist for the given layer
@@ -644,6 +727,7 @@ class ImageClient(VizClient):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def _update_axis_labels(self):
         """
         Sync the displays for labels on X/Y axes, because
@@ -651,12 +735,12 @@ class ImageClient(VizClient):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def relim(self):
         """
         Reset view window to the default pan/zoom setting.
         """
         pass
-
 
 
 class MplImageClient(ImageClient):
